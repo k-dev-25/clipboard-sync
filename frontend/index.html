@@ -26,7 +26,7 @@
         <!-- Session Cards -->
         <section>
           <!-- New Session Card -->
-          <div class="flex justify-center m-auto mt-10">
+          <div id="new-session-button" class="landing-only flex justify-center m-auto mt-10">
             <button
               class="bg-blue-500 hover:bg-blue-400 font-medium rounded-xl px-6 py-3"
             >
@@ -34,28 +34,32 @@
             </button>
           </div>
           <!-- Session Card -->
-          <div
-            class="bg-slate-800 flex flex-col gap-2 border border-slate-700 rounded-xl p-4 mt-10"
-          >
-            <label
-              for="sessionLink"
-              class="text-slate-400 text-xs tracking-wider"
-              >SESSION LINK</label
+          <div class="session-only hidden">
+            <div
+              class="bg-slate-800 flex flex-col gap-2 border border-slate-700 rounded-xl p-4 mt-10"
             >
-            <div class="flex justify-center items-center gap-2">
-              <input
-                type="url"
-                name="sessionLink"
-                id="sessionLink"
-                class="w-full bg-slate-900 font-mono rounded-lg p-2"
-                readonly
-              />
-              <button class="bg-slate-700 text-sm rounded-lg px-4 py-2">Copy</button>
+              <label
+                for="sessionLink"
+                class="text-slate-400 text-xs tracking-wider"
+                >SESSION LINK</label
+              >
+              <div class="flex justify-center items-center gap-2">
+                <input
+                  type="url"
+                  name="sessionLink"
+                  id="sessionLink"
+                  class="w-full bg-slate-900 font-mono rounded-lg p-2"
+                  readonly
+                />
+                <button class="bg-slate-700 text-sm rounded-lg px-4 py-2">
+                  Copy
+                </button>
+              </div>
             </div>
           </div>
         </section>
         <!-- Text-Area -->
-        <section>
+        <section class="session-only hidden">
           <textarea
             name="text"
             id="text"
@@ -64,7 +68,7 @@
           ></textarea>
         </section>
         <!-- Status Bar -->
-         <section>
+        <section class="session-only hidden">
           <div class="w-full text-slate-400 text-sm flex justify-between mt-6">
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -76,8 +80,9 @@
               <span>1 device</span>
             </div>
           </div>
-         </section>
+        </section>
       </main>
     </div>
+    <script type="module" src="./src/js/app.js"></script>
   </body>
 </html>
