@@ -10,7 +10,15 @@ if (params.has("token")) {
     ui.showLandingOnly();
 }
 
+ui.onCopySessionLink(copySessionLink);
+
 ui.onNewSession(generateNewSession);
+
+function copySessionLink() {
+    const link = ui.getSessionLink();
+    navigator.clipboard.writeText(link);
+    ui.showCopiedFeedback();
+}
 
 function generateNewSession() {
     const token = generateSimpleToken(12);
