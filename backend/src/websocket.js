@@ -26,12 +26,14 @@ wss.on("connection", (ws) => {
       const count = rooms.get(currentToken).size;
 
       for (const peer of rooms.get(currentToken)) {
-        peer.send(
-          JSON.stringify({
-            type: "device_count",
-            count,
-          }),
-        );
+        if (peer.readyState === peer.OPEN) {
+          peer.send(
+            JSON.stringify({
+              type: "device_count",
+              count,
+            }),
+          );
+        }
       }
       return;
     }
@@ -62,12 +64,14 @@ wss.on("connection", (ws) => {
     const count = peers.size;
 
     for (const peer of peers) {
-      peer.send(
-        JSON.stringify({
-          type: "device_count",
-          count,
-        }),
-      );
+      if (peer.readyState === peer.OPEN) {
+        peer.send(
+          JSON.stringify({
+            type: "device_count",
+            count,
+          }),
+        );
+      }
     }
   });
 });
