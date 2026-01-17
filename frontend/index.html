@@ -62,6 +62,18 @@
                 </button>
               </div>
             </div>
+            <div id="qr-container" class="hidden">
+              <div class="mt-6 flex justify-center">
+                <canvas id="qr-canvas"></canvas>
+              </div>
+            </div>
+
+            <button
+              id="showQRButton"
+              class="mt-4 bg-slate-700 text-sm rounded-lg px-4 py-2"
+            >
+              Show QR
+            </button>
           </div>
         </section>
         <!-- Text-Area -->
@@ -73,11 +85,11 @@
             placeholder="Paste or type here…"
           ></textarea>
           <button
-                  id="copyTextButton"
-                  class="bg-slate-700 text-sm rounded-lg px-4 py-2"
-                >
-                  Copy
-                </button>
+            id="copyTextButton"
+            class="bg-slate-700 text-sm rounded-lg px-4 py-2"
+          >
+            Copy
+          </button>
         </section>
         <!-- Status Bar -->
         <section class="session-only hidden">

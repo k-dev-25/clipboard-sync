@@ -1,6 +1,11 @@
 import { WebSocketServer } from "ws";
 
-const wss = new WebSocketServer({ port: 3000, host: "0.0.0.0" });
+const PORT = process.env.PORT || 3000;
+
+const wss = new WebSocketServer({
+  port: PORT,
+  host: "0.0.0.0",
+});
 
 const rooms = new Map();
 

@@ -1,16 +1,21 @@
+import QRCode from "qrcode";
 import ui from "./ui.js";
 import socket from "./socket.js";
+import { WS_HOST, WS_PORT } from "./config.js";
 
 let currentURL = syncWithURL();
 let isRemoteUpdate = false;
 let sendTimer = null;
 const SEND_DELAY = 300;
+let qrVisible = false;
 
 ui.onCopySessionLink(copySessionLink);
 
 ui.onCopyText(copyText);
 
 ui.onNewSession(generateNewSession);
+
+ui.onShowQR(toggleQR);
 
 ui.onTextareaInput(scheduleSend);
 
@@ -32,7 +37,29 @@ async function copyText() {
   const text = ui.getText();
   if (!text.trim()) return;
   await navigator.clipboard.writeText(text);
-  ui.showCopiedFeedback("textArea")
+  ui.showCopiedFeedback("textArea");
+}
+
+async function toggleQR() {
+  if (!qrVisible) {
+    const link = currentURL.toString();
+    const canvas = ui.getQRCanvas();
+
+    await QRCode.toCanvas(canvas, link, {
+      width: 200,
+      margin: 1,
+      color: {
+        dark: "#ffffff",
+        light: "#020617", // slate-950
+      },
+    });
+
+    ui.showQR();
+    qrVisible = true;
+  } else {
+    ui.hideQR();
+    qrVisible = false;
+  }
 }
 
 function generateNewSession() {

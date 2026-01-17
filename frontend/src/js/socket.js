@@ -15,7 +15,7 @@ function connect(token) {
 
   if (connectingHandler) connectingHandler();
 
-  socket = new WebSocket(`ws://${WS_HOST}:${WS_PORT}`);
+  socket = new WebSocket(`${WS_PROTOCOL}://${WS_HOST}:${WS_PORT}`);
 
   socket.addEventListener("open", () => {
     if (connectedHandler) connectedHandler();

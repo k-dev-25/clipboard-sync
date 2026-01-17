@@ -4,8 +4,11 @@
   "description": "",
   "main": "postcss.config.js",
   "scripts": {
-    "dev": "tailwindcss -i ./src/css/input.css -o ./dist/output.css --watch",
-    "build": "tailwindcss -i ./src/css/input.css -o ./dist/output.css --minify",
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "css:dev": "tailwindcss -i ./src/css/input.css -o ./dist/output.css --watch",
+    "css:build": "tailwindcss -i ./src/css/input.css -o ./dist/output.css --minify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,6 +17,10 @@
   "type": "module",
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
   }
 }
