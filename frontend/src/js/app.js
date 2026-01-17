@@ -49,9 +49,11 @@ async function toggleQR() {
     });
 
     ui.showQR();
+    ui.setQRButtonText("Hide QR");
     qrVisible = true;
   } else {
     ui.hideQR();
+    ui.setQRButtonText("Show QR");
     qrVisible = false;
   }
 }

@@ -46,6 +46,10 @@ function hideQR() {
   qrContainer.classList.add("hidden");
 }
 
+function setQRButtonText(text) {
+  showQRButton.textContent = text;
+}
+
 function getQRCanvas() {
   return qrCanvas;
 }
@@ -111,6 +115,7 @@ export default {
   onTextareaInput,
   setConnectionStatus,
   setDeviceCount,
+  setQRButtonText,
   setSessionLink,
   setText,
   showCopiedFeedback,
