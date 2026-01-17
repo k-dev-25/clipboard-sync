@@ -2,10 +2,17 @@ import ui from "./ui.js";
 import socket from "./socket.js";
 
 let currentURL = syncWithURL();
+let isRemoteUpdate = false;
+let sendTimer = null;
+const SEND_DELAY = 300;
 
 ui.onCopySessionLink(copySessionLink);
 
 ui.onNewSession(generateNewSession);
+
+ui.onTextareaInput(scheduleSend);
+
+socket.onClipboard(setText);
 
 async function copySessionLink() {
   const link = currentURL.toString();
@@ -32,6 +39,29 @@ function generateSimpleToken(length) {
   return token;
 }
 
+function scheduleSend() {
+  if (sendTimer) {
+    clearTimeout(sendTimer);
+  }
+  sendTimer = setTimeout(() => {
+    sendText();
+    sendTimer = null;
+  }, SEND_DELAY);
+}
+
+function sendText() {
+  const params = new URLSearchParams(currentURL.search);
+  if (!params.has("token") || isRemoteUpdate) return;
+  const text = ui.getText();
+  socket.sendClipboard(text);
+}
+
+function setText(text) {
+  isRemoteUpdate = true;
+  ui.setText(text);
+  isRemoteUpdate = false;
+}
+
 function syncWithURL() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
@@ -39,10 +69,9 @@ function syncWithURL() {
   if (params.has("token")) {
     ui.showSessionOnly();
     ui.setSessionLink(url.toString());
-    socket.connect();
+    socket.connect(params.get("token"));
   } else {
     ui.showLandingOnly();
-    socket.disconnect();
   }
 
   return url;

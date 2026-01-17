@@ -1,31 +1,55 @@
-let socket = null;
+import { WS_HOST, WS_PORT } from "./config.js";
 
-function connect() {
+let socket = null;
+let activeToken = null;
+let clipboardHandler = null;
+
+function connect(token) {
   if (socket) return;
 
-  socket = new WebSocket("ws://127.0.0.1:3000");
+  activeToken = token;
+
+  socket = new WebSocket(`ws://${WS_HOST}:${WS_PORT}`);
 
   socket.addEventListener("open", () => {
-    console.log("socket connected");
+    socket.send(
+      JSON.stringify({
+        type: "join",
+        token: activeToken,
+      })
+    );
+  });
+
+  socket.addEventListener("message", (message) => {
+    const data = JSON.parse(message.data);
+    if (data.type === "clipboard" && clipboardHandler) {
+      clipboardHandler(data.text);
+    }
   });
 
   socket.addEventListener("close", () => {
-    console.log("socket disconnected");
     socket = null;
-  });
-
-  socket.addEventListener("error", (err) => {
-    console.error("socket error", err);
+    activeToken = null;
   });
 }
 
-function disconnect() {
+function onClipboard(handler) {
+  clipboardHandler = handler;
+}
+
+function sendClipboard(text) {
   if (!socket) return;
-  socket.close();
-  socket = null;
+
+  socket.send(
+    JSON.stringify({
+      type: "clipboard",
+      text,
+    })
+  );
 }
 
 export default {
   connect,
-  disconnect,
+  onClipboard,
+  sendClipboard,
 };
