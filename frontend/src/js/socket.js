@@ -36,6 +36,8 @@ function tryConnect() {
     const data = JSON.parse(message.data);
     if (data.type === "clipboard" && clipboardHandler) {
       clipboardHandler(data.text);
+    } else if (data.type === "device_count") {
+      ui.setDeviceCount(data.count);
     }
   });
 
