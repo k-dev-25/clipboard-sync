@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -26,7 +26,10 @@
         <!-- Session Cards -->
         <section>
           <!-- New Session Card -->
-          <div id="new-session-button" class="landing-only flex justify-center m-auto mt-10">
+          <div
+            id="new-session-button"
+            class="landing-only flex justify-center m-auto mt-10"
+          >
             <button
               class="bg-blue-500 hover:bg-blue-400 font-medium rounded-xl px-6 py-3"
             >
@@ -51,7 +54,10 @@
                   class="w-full bg-slate-900 font-mono rounded-lg p-2"
                   readonly
                 />
-                <button id="copyButton" class="bg-slate-700 text-sm rounded-lg px-4 py-2">
+                <button
+                  id="copyButton"
+                  class="bg-slate-700 text-sm rounded-lg px-4 py-2"
+                >
                   Copy
                 </button>
               </div>
@@ -71,13 +77,16 @@
         <section class="session-only hidden">
           <div class="w-full text-slate-400 text-sm flex justify-between mt-6">
             <div class="flex items-center gap-2">
-              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span>Connected</span>
-              <span class="hidden">Connecting</span>
-              <span class="hidden">Disconnected</span>
+              <div
+                id="status-color"
+                class="w-3 h-3 bg-green-500 rounded-full transition-colors"
+              ></div>
+              <span id="status-connected">Connected</span>
+              <span id="status-connecting" class="hidden">Connecting</span>
+              <span id="status-disconnected" class="hidden">Disconnected</span>
             </div>
             <div>
-              <span>1 device</span>
+              <span id="device-count">1 device</span>
             </div>
           </div>
         </section>

@@ -1,8 +1,8 @@
 import { WebSocketServer } from "ws";
 
-const wss = new WebSocketServer({ port: 3000, host: '0.0.0.0' });
+const wss = new WebSocketServer({ port: 3000, host: "0.0.0.0" });
 
-console.log('WebSocket server listening on ws://0.0.0.0:3000');
+console.log("WebSocket server listening on ws://0.0.0.0:3000");
 
 const rooms = new Map();
 
@@ -19,6 +19,17 @@ wss.on("connection", (ws) => {
         rooms.set(currentToken, new Set());
       }
       rooms.get(currentToken).add(ws);
+
+      const count = rooms.get(currentToken).size;
+
+      for (const peer of rooms.get(currentToken)) {
+        peer.send(
+          JSON.stringify({
+            type: "device_count",
+            count,
+          }),
+        );
+      }
       return;
     }
 
@@ -42,6 +53,18 @@ wss.on("connection", (ws) => {
 
     if (peers.size === 0) {
       rooms.delete(currentToken);
+      return;
+    }
+
+    const count = peers.size;
+
+    for (const peer of peers) {
+      peer.send(
+        JSON.stringify({
+          type: "device_count",
+          count,
+        }),
+      );
     }
   });
 });

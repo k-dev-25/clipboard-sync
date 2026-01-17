@@ -14,6 +14,12 @@ ui.onTextareaInput(scheduleSend);
 
 socket.onClipboard(setText);
 
+socket.onConnected(handleConnected);
+socket.onConnecting(handleConnecting);
+socket.onDisconnected(handleDisconnected);
+
+socket.onDeviceCount(setDeviceCount);
+
 async function copySessionLink() {
   const link = currentURL.toString();
   await navigator.clipboard.writeText(link);
@@ -39,6 +45,18 @@ function generateSimpleToken(length) {
   return token;
 }
 
+function handleConnected() {
+  ui.setConnectionStatus("Connected");
+}
+
+function handleConnecting() {
+  ui.setConnectionStatus("Connecting");
+}
+
+function handleDisconnected() {
+  ui.setConnectionStatus("Disconnected");
+}
+
 function scheduleSend() {
   if (sendTimer) {
     clearTimeout(sendTimer);
@@ -54,6 +72,10 @@ function sendText() {
   if (!params.has("token") || isRemoteUpdate) return;
   const text = ui.getText();
   socket.sendClipboard(text);
+}
+
+function setDeviceCount(count) {
+  ui.setDeviceCount(count);
 }
 
 function setText(text) {
