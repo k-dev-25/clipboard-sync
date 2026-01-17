@@ -16,11 +16,11 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18",
     "vite": "^7.3.1"
   },
   "dependencies": {
-    "qrcode": "^1.5.4"
+    "@tailwindcss/vite": "^4.1.18",
+    "qrcode": "^1.5.4",
+    "tailwindcss": "^4.1.18"
   }
 }
