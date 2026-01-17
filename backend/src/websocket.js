@@ -2,8 +2,6 @@ import { WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: 3000, host: "0.0.0.0" });
 
-console.log("WebSocket server listening on ws://0.0.0.0:3000");
-
 const rooms = new Map();
 
 wss.on("connection", (ws) => {

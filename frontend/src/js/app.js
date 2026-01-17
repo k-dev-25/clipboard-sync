@@ -8,6 +8,8 @@ const SEND_DELAY = 300;
 
 ui.onCopySessionLink(copySessionLink);
 
+ui.onCopyText(copyText);
+
 ui.onNewSession(generateNewSession);
 
 ui.onTextareaInput(scheduleSend);
@@ -23,7 +25,14 @@ socket.onDeviceCount(setDeviceCount);
 async function copySessionLink() {
   const link = currentURL.toString();
   await navigator.clipboard.writeText(link);
-  ui.showCopiedFeedback();
+  ui.showCopiedFeedback("sessionLink");
+}
+
+async function copyText() {
+  const text = ui.getText();
+  if (!text.trim()) return;
+  await navigator.clipboard.writeText(text);
+  ui.showCopiedFeedback("textArea")
 }
 
 function generateNewSession() {

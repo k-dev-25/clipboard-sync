@@ -1,7 +1,8 @@
 const newSessionButton = document.getElementById("new-session-button");
 const sessionLink = document.getElementById("sessionLink");
-const copyButton = document.getElementById("copyButton");
+const copyLinkButton = document.getElementById("copyLinkButton");
 const textArea = document.getElementById("text");
+const copyTextButton = document.getElementById("copyTextButton");
 const statusColor = document.getElementById("status-color");
 const statusConnected = document.getElementById("status-connected");
 const statusConnecting = document.getElementById("status-connecting");
@@ -15,7 +16,11 @@ function getText() {
 }
 
 function onCopySessionLink(handler) {
-  copyButton.addEventListener("click", handler);
+  copyLinkButton.addEventListener("click", handler);
+}
+
+function onCopyText(handler) {
+  copyTextButton.addEventListener("click", handler)
 }
 
 function onNewSession(handler) {
@@ -58,10 +63,11 @@ function setText(text) {
   textArea.value = text;
 }
 
-function showCopiedFeedback() {
-  copyButton.textContent = "Copied!";
+function showCopiedFeedback(button) {
+  const Button = button === "textArea" ? copyTextButton : copyLinkButton
+  Button.textContent = "Copied!";
   setTimeout(() => {
-    copyButton.textContent = "Copy";
+    Button.textContent = "Copy";
   }, 1000);
 }
 
@@ -78,6 +84,7 @@ function showSessionOnly() {
 export default {
   getText,
   onCopySessionLink,
+  onCopyText,
   onNewSession,
   onTextareaInput,
   setConnectionStatus,
