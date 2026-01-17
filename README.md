@@ -45,7 +45,7 @@ No authentication, no database, no persistence — fast and ephemeral by design.
 
 ### Hosting
 - Frontend: Netlify
-- Backend: Railway
+- Backend: Render (Free tier, may sleep when idle)
 - HTTPS + WSS enabled
 
 ---
