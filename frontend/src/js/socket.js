@@ -1,30 +1,35 @@
-import { WS_HOST, WS_PORT } from "./config.js";
+import ui from "./ui.js";
+import { WS_HOST } from "./config.js";
 
 let socket = null;
 let activeToken = null;
 let clipboardHandler = null;
-let connectingHandler = null;
-let connectedHandler = null;
-let disconnectedHandler = null;
-let deviceCountHandler = null;
+
+let reconnectTimer = null;
+const RECONNECT_DELAY = 3000;
 
 function connect(token) {
   if (socket) return;
 
   activeToken = token;
+  ui.setConnectionStatus("Connecting");
+  tryConnect();
+}
 
-  if (connectingHandler) connectingHandler();
-
-  socket = new WebSocket(`${WS_PROTOCOL}://${WS_HOST}:${WS_PORT}`);
+function tryConnect() {
+  socket = new WebSocket(`wss://${WS_HOST}`);
 
   socket.addEventListener("open", () => {
-    if (connectedHandler) connectedHandler();
+    ui.setConnectionStatus("Connected");
+
     socket.send(
       JSON.stringify({
         type: "join",
         token: activeToken,
-      }),
+      })
     );
+
+    clearReconnect();
   });
 
   socket.addEventListener("message", (message) => {
@@ -32,56 +37,56 @@ function connect(token) {
     if (data.type === "clipboard" && clipboardHandler) {
       clipboardHandler(data.text);
     }
-
-    if (data.type === "device_count" && deviceCountHandler) {
-      deviceCountHandler(data.count);
-    }
   });
 
-  socket.addEventListener("close", () => {
+  socket.addEventListener("close", handleDisconnect);
+  socket.addEventListener("error", handleDisconnect);
+}
+
+function handleDisconnect() {
+  if (socket) {
+    socket.close();
     socket = null;
-    activeToken = null;
-    if (disconnectedHandler) disconnectedHandler();
-  });
+  }
+
+  ui.setConnectionStatus("Disconnected");
+  scheduleReconnect();
+}
+
+function scheduleReconnect() {
+  if (reconnectTimer) return;
+
+  reconnectTimer = setTimeout(() => {
+    reconnectTimer = null;
+    ui.setConnectionStatus("Connecting");
+    tryConnect();
+  }, RECONNECT_DELAY);
+}
+
+function clearReconnect() {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
 }
 
 function onClipboard(handler) {
   clipboardHandler = handler;
 }
 
-function onConnected(handler) {
-  connectedHandler = handler;
-}
-
-function onConnecting(handler) {
-  connectingHandler = handler;
-}
-
-function onDisconnected(handler) {
-  disconnectedHandler = handler;
-}
-
-function onDeviceCount(handler) {
-  deviceCountHandler = handler;
-}
-
 function sendClipboard(text) {
-  if (!socket) return;
+  if (!socket || socket.readyState !== WebSocket.OPEN) return;
 
   socket.send(
     JSON.stringify({
       type: "clipboard",
       text,
-    }),
+    })
   );
 }
 
 export default {
   connect,
   onClipboard,
-  onConnected,
-  onConnecting,
-  onDisconnected,
-  onDeviceCount,
   sendClipboard,
 };
