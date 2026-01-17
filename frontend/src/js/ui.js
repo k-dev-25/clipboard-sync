@@ -12,10 +12,6 @@ function onNewSession(handler) {
   newSessionButton.addEventListener("click", handler);
 }
 
-function getSessionLink() {
-  return sessionLink.value;
-}
-
 function setSessionLink(link) {
   sessionLink.value = link;
 }
@@ -38,7 +34,6 @@ function showSessionOnly() {
 }
 
 export default {
-  getSessionLink,
   onCopySessionLink,
   onNewSession,
   setSessionLink,

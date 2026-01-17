@@ -1,32 +1,25 @@
 import ui from "./ui.js";
+import socket from "./socket.js";
 
-const url = new URL(window.location.href);
-const params = new URLSearchParams(url.search);
-
-if (params.has("token")) {
-  ui.showSessionOnly();
-  ui.setSessionLink(url.toString());
-} else {
-    ui.showLandingOnly();
-}
+let currentURL = syncWithURL();
 
 ui.onCopySessionLink(copySessionLink);
 
 ui.onNewSession(generateNewSession);
 
-function copySessionLink() {
-    const link = ui.getSessionLink();
-    navigator.clipboard.writeText(link);
-    ui.showCopiedFeedback();
+async function copySessionLink() {
+  const link = currentURL.toString();
+  await navigator.clipboard.writeText(link);
+  ui.showCopiedFeedback();
 }
 
 function generateNewSession() {
-    const token = generateSimpleToken(12);
-    params.set("token", token);
-    url.search = params.toString();
-    window.history.pushState({}, "", url.toString());
-    ui.showSessionOnly();
-    ui.setSessionLink(url.toString());
+  const token = generateSimpleToken(12);
+  const params = new URLSearchParams(currentURL.search);
+  params.set("token", token);
+  currentURL.search = params.toString();
+  window.history.pushState({}, "", currentURL.toString());
+  currentURL = syncWithURL();
 }
 
 function generateSimpleToken(length) {
@@ -38,3 +31,23 @@ function generateSimpleToken(length) {
   }
   return token;
 }
+
+function syncWithURL() {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+
+  if (params.has("token")) {
+    ui.showSessionOnly();
+    ui.setSessionLink(url.toString());
+    socket.connect();
+  } else {
+    ui.showLandingOnly();
+    socket.disconnect();
+  }
+
+  return url;
+}
+
+window.addEventListener("popstate", () => {
+  currentURL = syncWithURL();
+});
